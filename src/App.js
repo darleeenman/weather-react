@@ -64,11 +64,15 @@ export default function Weather() {
         This project was coded by{" "}
         <a
           href="https://inquisitive-mermaid-0c1c3d.netlify.app"
-          target="_blank">
+          target="_blank"
+          rel="noreferrer">
           Darleen Man
         </a>{" "}
         and is{" "}
-        <a href="https://github.com/darleeenman/weather-react" target="_blank">
+        <a
+          href="https://github.com/darleeenman/weather-react"
+          target="_blank"
+          rel="noreferrer">
           open-sourced on GitHub
         </a>
       </footer>
