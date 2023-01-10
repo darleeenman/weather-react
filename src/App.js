@@ -60,6 +60,18 @@ export default function Weather() {
           </ul>
         </div>
       </div>
+      <footer>
+        This project was coded by{" "}
+        <a
+          href="https://inquisitive-mermaid-0c1c3d.netlify.app"
+          target="_blank">
+          Darleen Man
+        </a>{" "}
+        and is{" "}
+        <a href="https://github.com/darleeenman/weather-react" target="_blank">
+          open-sourced on GitHub
+        </a>
+      </footer>
     </div>
   );
 }
