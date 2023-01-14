@@ -2,7 +2,7 @@
   border: 1px solid #000;
   padding: 16px;
   margin: 30px auto;
-  max-width: 400px;
+  max-width: 650px;
   border-radius: 4px;
 }
 
@@ -51,4 +51,11 @@
 
 .Weather .float-left {
   margin-left: -400px;
+}
+.Weather .WeatherInfo {
+  max-width: fit-content;
+}
+
+.Weather h1 {
+  position: relative;
 }
