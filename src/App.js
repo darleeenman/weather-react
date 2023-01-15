@@ -8,7 +8,7 @@ export default function App() {
       <div className="container">
         <Weather defaultCity="Cerritos" />
 
-        <footer>
+        <footer className="d-flex justify-content-center">
           This project was coded by{" "}
           <a
             href="https://inquisitive-mermaid-0c1c3d.netlify.app"
