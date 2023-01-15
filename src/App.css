@@ -1,6 +1,6 @@
 .App {
   font-family: sans-serif;
-  text-align: center;
+  text-align: left;
 }
 body {
   font-family: Helvetica;
@@ -29,14 +29,14 @@ form {
 
 ul {
   position: relative;
-  right: -190px;
-  top: -70px;
+  right: -170px;
+  top: -75px;
   line-height: 1;
   width: max-content;
 }
 li {
   position: relative;
-  right: 150px;
+  right: 75px;
   top: 85px;
   list-style: none;
   display: list-item;
@@ -54,7 +54,7 @@ li {
 
 .search-form {
   margin-bottom: 50px;
-  max-width: 500px;
+  min-width: 100px;
 }
 .overview {
   margin-bottom: -50px;

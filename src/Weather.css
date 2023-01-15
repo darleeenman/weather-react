@@ -3,12 +3,15 @@
   background-color: rgba(255, 255, 255, 0.2);
   padding: 16px;
   margin: 30px auto;
-  max-width: 650px;
+  min-width: 400px;
+  max-width: fit-content;
   border-radius: 4px;
+  height: 600px;
 }
 
 .Weather form {
   margin-bottom: 20px;
+  min-width: 450px;
 }
 
 .Weather h1 {
@@ -59,4 +62,9 @@
 
 .Weather h1 {
   position: relative;
+  margin-left: 100px;
+}
+
+.WeatherInfo {
+  width: 500px;
 }
