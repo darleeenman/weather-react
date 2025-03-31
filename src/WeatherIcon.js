@@ -14,9 +14,9 @@ export default function WeatherIcon(props) {
     // Clear the canvas
     ctx.clearRect(0, 0, size, size);
 
-    // Set the icon color to transparent white
-    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+    // Set the icon color to white with 30% opacity
+    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
 
     // Draw the icon based on the weather code
     switch (props.code) {
@@ -112,8 +112,9 @@ export default function WeatherIcon(props) {
       0,
       2 * Math.PI
     );
-    ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
     ctx.fill();
+    ctx.fillStyle = "rgba(255, 255, 255, 0.3)"; // Reset fill style
   }
 
   function drawCloudy(ctx, size) {
@@ -249,5 +250,5 @@ export default function WeatherIcon(props) {
     ctx.fill();
   }
 
-  return <canvas ref={canvasRef} alt="weather icon" />;
+  return <canvas ref={canvasRef} alt="weather icon" style={{ opacity: 0.3 }} />;
 }
