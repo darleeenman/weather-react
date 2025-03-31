@@ -1,18 +1,12 @@
 .Weather {
-  font-family: arial, sans-serif;
-  border: 1px solid #dadde1;
-  padding: 16px;
-  border-radius: 4px;
-  color: rgb(135, 135, 135);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 600px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: "Poppins", sans-serif;
 }
 
 .Weather form {
   margin-bottom: 20px;
-  width: 100%;
 }
 
 .Weather h1 {
@@ -90,15 +84,72 @@
   text-align: center;
 }
 
-.error-message {
+.Weather .form-control {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Weather .form-control:focus {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.Weather .btn-primary {
+  background: #007bff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.Weather .btn-primary:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.Weather .btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.Weather .error-message {
   color: #dc3545;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
   padding: 10px;
-  margin: 10px 0;
-  font-size: 14px;
+  border-radius: 8px;
+  margin-bottom: 20px;
   text-align: center;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
+
+.Weather .loading-message {
+  color: #fff;
+  text-align: center;
+  font-size: 18px;
+  margin: 20px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+}
+
+.weather-container {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
 }
 
 .search-container {
@@ -136,9 +187,14 @@
   background-color: #0b5ed7;
 }
 
-.loading {
-  text-align: center;
-  padding: 20px;
-  font-size: 18px;
-  color: #666;
+@media (max-width: 576px) {
+  .Weather {
+    padding: 15px;
+  }
+
+  .Weather .form-control,
+  .Weather .btn-primary {
+    padding: 10px;
+    font-size: 14px;
+  }
 }

@@ -200,10 +200,10 @@ export default function Weather(props) {
       </form>
       {error && <div className="error-message">{error}</div>}
       {weatherData && (
-        <>
+        <div className="weather-container">
           <WeatherInfo data={weatherData} />
           <WeatherForecast coordinates={weatherData.coord} />
-        </>
+        </div>
       )}
       {!weatherData && !error && (
         <div className="loading-message">Loading weather data...</div>
