@@ -1,65 +1,81 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./Weather.css";
 import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
 import WeatherForecast from "./WeatherForecast";
 
 export default function Weather(props) {
-  let [weatherData, setWeatherData] = useState({ ready: false });
+  const dispatch = useDispatch();
+  const { background, loading, error } = useSelector((state) => state);
   let [city, setCity] = useState(props.defaultCity);
-  let [error, setError] = useState(null);
-  let [isLoading, setIsLoading] = useState(false);
   let [lastRequestTime, setLastRequestTime] = useState(0);
 
-  const handleResponse = useCallback((response) => {
-    if (!response || !response.data) {
-      setError("Invalid response from server");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      setWeatherData({
-        ready: true,
-        coordinates: response.data.coord,
-        temperature: response.data.main.temp,
-        humidity: response.data.main.humidity,
-        description: response.data.weather[0].description,
-        icon: response.data.weather[0].icon,
-        wind: response.data.wind.speed,
-        city: response.data.name,
-        date: new Date(response.data.dt * 1000),
-      });
-      setError(null);
-    } catch (err) {
-      setError("Error processing weather data");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const handleError = useCallback((error) => {
-    if (error.response) {
-      if (error.response.status === 429) {
-        setError(
-          "Too many requests. Please wait a few minutes before trying again."
-        );
-      } else if (error.response.status === 404) {
-        setError("City not found. Please check the spelling and try again.");
-      } else if (error.response.status === 401) {
-        setError("API key error. Please try again later.");
-      } else {
-        setError("An error occurred. Please try again later.");
+  const handleResponse = useCallback(
+    (response) => {
+      if (!response || !response.data) {
+        dispatch({
+          type: "SET_ERROR",
+          payload: "Invalid response from server",
+        });
+        return;
       }
-    } else if (error.request) {
-      setError(
-        "No response from server. Please check your internet connection."
-      );
-    } else {
-      setError("An error occurred. Please try again later.");
-    }
-    setIsLoading(false);
-  }, []);
+
+      try {
+        dispatch({
+          type: "SET_WEATHER",
+          payload: response.data,
+        });
+      } catch (err) {
+        dispatch({
+          type: "SET_ERROR",
+          payload: "Error processing weather data",
+        });
+      }
+    },
+    [dispatch]
+  );
+
+  const handleError = useCallback(
+    (error) => {
+      if (error.response) {
+        if (error.response.status === 429) {
+          dispatch({
+            type: "SET_ERROR",
+            payload:
+              "Too many requests. Please wait a few minutes before trying again.",
+          });
+        } else if (error.response.status === 404) {
+          dispatch({
+            type: "SET_ERROR",
+            payload: "City not found. Please check the spelling and try again.",
+          });
+        } else if (error.response.status === 401) {
+          dispatch({
+            type: "SET_ERROR",
+            payload: "API key error. Please try again later.",
+          });
+        } else {
+          dispatch({
+            type: "SET_ERROR",
+            payload: "An error occurred. Please try again later.",
+          });
+        }
+      } else if (error.request) {
+        dispatch({
+          type: "SET_ERROR",
+          payload:
+            "No response from server. Please check your internet connection.",
+        });
+      } else {
+        dispatch({
+          type: "SET_ERROR",
+          payload: "An error occurred. Please try again later.",
+        });
+      }
+    },
+    [dispatch]
+  );
 
   const search = useCallback(() => {
     const now = Date.now();
@@ -67,11 +83,14 @@ export default function Weather(props) {
 
     // If less than 2 seconds since last request, wait
     if (timeSinceLastRequest < 2000) {
-      setError("Please wait a moment before searching again.");
+      dispatch({
+        type: "SET_ERROR",
+        payload: "Please wait a moment before searching again.",
+      });
       return;
     }
 
-    setIsLoading(true);
+    dispatch({ type: "SET_LOADING", payload: true });
     setLastRequestTime(now);
 
     const apiKey = "b05cde912d67b744d66a05c658a57e27";
@@ -88,93 +107,71 @@ export default function Weather(props) {
       .then(handleResponse)
       .catch(handleError)
       .finally(() => {
-        setIsLoading(false);
+        dispatch({ type: "SET_LOADING", payload: false });
       });
-  }, [city, lastRequestTime, handleResponse, handleError]);
+  }, [city, lastRequestTime, handleResponse, handleError, dispatch]);
 
   useEffect(() => {
     let mounted = true;
 
-    if (!weatherData.ready && mounted) {
+    if (mounted) {
       search();
     }
 
     return () => {
       mounted = false;
     };
-  }, [weatherData.ready, search]);
+  }, [search]);
 
   function handleSubmit(event) {
     event.preventDefault();
     if (city.trim() === "") {
-      setError("Please enter a city name");
+      dispatch({ type: "SET_ERROR", payload: "Please enter a city name" });
       return;
     }
-    setWeatherData({ ready: false });
     search();
   }
 
   function handleCityChange(event) {
     setCity(event.target.value);
-    setError(null);
+    dispatch({ type: "SET_ERROR", payload: null });
   }
 
-  if (weatherData.ready) {
-    return (
-      <div className="Weather">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-9">
-              <input
-                type="text"
-                placeholder="Enter a city..."
-                className="form-control"
-                onChange={handleCityChange}
-                defaultValue={city}
-              />
-            </div>
-            <div className="col-3">
-              <input
-                type="submit"
-                value={isLoading ? "Searching..." : "Search"}
-                className="btn btn-primary w-100"
-                disabled={isLoading}
-              />
-            </div>
+  const weatherData = useSelector((state) => state.weather);
+
+  return (
+    <div className="Weather" style={{ backgroundColor: background }}>
+      <form onSubmit={handleSubmit}>
+        <div className="row">
+          <div className="col-9">
+            <input
+              type="text"
+              placeholder="Enter a city..."
+              className="form-control"
+              onChange={handleCityChange}
+              defaultValue={city}
+            />
           </div>
-        </form>
-        {error && <div className="error-message">{error}</div>}
-        <WeatherInfo data={weatherData} />
-        <WeatherForecast coordinates={weatherData.coordinates} />
-      </div>
-    );
-  } else {
-    return (
-      <div className="Weather">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-9">
-              <input
-                type="text"
-                placeholder="Enter a city..."
-                className="form-control"
-                onChange={handleCityChange}
-                defaultValue={city}
-              />
-            </div>
-            <div className="col-3">
-              <input
-                type="submit"
-                value={isLoading ? "Searching..." : "Search"}
-                className="btn btn-primary w-100"
-                disabled={isLoading}
-              />
-            </div>
+          <div className="col-3">
+            <input
+              type="submit"
+              value={loading ? "Searching..." : "Search"}
+              className="btn btn-primary w-100"
+              disabled={loading}
+            />
           </div>
-        </form>
-        {error && <div className="error-message">{error}</div>}
+        </div>
+      </form>
+      {error && <div className="error-message">{error}</div>}
+      {weatherData && (
+        <>
+          <WeatherInfo data={weatherData} />
+          <WeatherForecast coordinates={weatherData.coord} />
+        </>
+      )}
+      {!weatherData && (
         <div className="loading-message">Loading weather data...</div>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }

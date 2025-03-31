@@ -1,11 +1,13 @@
 import React from "react";
-import "./App.css";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 import Weather from "./Weather";
+import "./App.css";
 
 export default function App() {
   return (
-    <div className="App">
-      <div className="container">
+    <Provider store={store}>
+      <div className="App">
         <Weather defaultCity="Cerritos" />
 
         <footer className="d-flex justify-content-center">
@@ -32,6 +34,6 @@ export default function App() {
           </a>
         </footer>
       </div>
-    </div>
+    </Provider>
   );
 }
