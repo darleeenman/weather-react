@@ -7,6 +7,7 @@ import WeatherForecast from "./WeatherForecast";
 export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
+  const [error, setError] = useState(null);
 
   function handleResponse(response) {
     setWeatherData({
@@ -20,6 +21,24 @@ export default function Weather(props) {
       wind: response.data.wind.speed,
       city: response.data.name,
     });
+    setError(null);
+  }
+
+  function handleError(error) {
+    if (error.response) {
+      if (error.response.status === 404) {
+        setError("City not found. Please try another city name.");
+      } else if (error.response.status === 401) {
+        setError("API key error. Please try again later.");
+      } else {
+        setError("An error occurred. Please try again later.");
+      }
+    } else if (error.request) {
+      setError("No response from server. Please check your internet connection.");
+    } else {
+      setError("An error occurred. Please try again later.");
+    }
+    setWeatherData({ ready: false });
   }
 
   function handleSubmit(event) {
@@ -32,9 +51,9 @@ export default function Weather(props) {
   }
 
   function search() {
-    const apiKey = "63dfb39dc38318c0c7e200e9557dfa6f";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse);
+    const apiKey = "0d78d3d987e492a289265ccd0e1ddc36";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
+    axios.get(apiUrl).then(handleResponse).catch(handleError);
   }
 
   if (weatherData.ready) {
@@ -52,14 +71,11 @@ export default function Weather(props) {
               />
             </div>
             <div className="col-3">
-              <input
-                type="submit"
-                value="Search"
-                className="btn w-100"
-              />
+              <input type="submit" value="Search" className="btn w-100" />
             </div>
           </div>
         </form>
+        {error && <div className="error-message">{error}</div>}
         <WeatherInfo data={weatherData} />
         <WeatherForecast coordinates={weatherData.coordinates} />
       </div>

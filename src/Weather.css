@@ -1,11 +1,9 @@
 .Weather {
-  border: 1px solid lightblue;
-  background-color: rgba(255, 255, 255, 0.2);
+  font-family: arial, sans-serif;
+  border: 1px solid #dadde1;
   padding: 16px;
-  margin: 30px auto;
-  min-height: 475px;
-  max-height: fit-content;
   border-radius: 4px;
+  color: rgb(135, 135, 135);
 }
 
 .Weather form {
@@ -16,8 +14,9 @@
 .Weather h1 {
   font-size: 24px;
   font-weight: 100;
-  margin: 20px 0 0 0;
+  margin: 0;
   line-height: 29px;
+  padding: 0;
 }
 
 .Weather ul {
@@ -34,27 +33,52 @@
 
 .Weather .temperature {
   font-weight: bold;
+  color: rgb(33, 33, 33);
   font-size: 64px;
-  font-weight: 400;
-  height: auto;
   line-height: 64px;
-  margin-left: 15px;
-  text-align: center;
+  font-weight: 400;
 }
 
 .WeatherTemperature {
   width: 140px;
 }
-.unit {
+
+.Weather .unit {
+  color: rgb(33, 33, 33);
   font-size: 16px;
+  font-weight: 400;
   position: relative;
   line-height: 1;
   top: -34px;
 }
 
+.Weather .unit a {
+  color: rgb(33, 33, 33);
+  text-decoration: none;
+}
+
+.Weather .unit a:hover {
+  text-decoration: underline;
+}
+
+.Weather .btn {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.Weather .btn:hover {
+  background-color: #0b5ed7;
+}
+
 .Weather .float-left {
   margin-left: -400px;
 }
+
 .Weather .WeatherInfo {
   max-width: fit-content;
 }
@@ -66,4 +90,14 @@
 
 .WeatherInfo {
   width: 500px;
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 14px;
 }
