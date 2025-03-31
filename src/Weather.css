@@ -3,7 +3,7 @@
   max-width: 800px;
   margin: 0 auto;
   font-family: "Montserrat", sans-serif;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  background: linear-gradient(135deg, #4682b4 0%, #5f9ea0 100%);
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
@@ -156,7 +156,7 @@
 }
 
 .weather-container {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   padding: 30px;
   margin-top: 20px;
