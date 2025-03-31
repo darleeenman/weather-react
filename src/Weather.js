@@ -5,7 +5,7 @@ import WeatherInfo from "./WeatherInfo";
 import WeatherForecast from "./WeatherForecast";
 
 export default function Weather(props) {
-  let [weatherData, setWeatherData] = useState(null);
+  let [weatherData, setWeatherData] = useState({ ready: false });
   let [city, setCity] = useState(props.defaultCity);
   let [error, setError] = useState(null);
   let [isLoading, setIsLoading] = useState(false);
@@ -30,10 +30,10 @@ export default function Weather(props) {
   }, [city, lastRequestTime]);
 
   useEffect(() => {
-    if (!weatherData) {
+    if (!weatherData.ready) {
       search();
     }
-  }, [weatherData, search]);
+  }, []); // Empty dependency array for initial load only
 
   function handleResponse(response) {
     setWeatherData({
@@ -80,6 +80,7 @@ export default function Weather(props) {
       setError("Please enter a city name");
       return;
     }
+    setWeatherData({ ready: false });
     search();
   }
 
@@ -88,7 +89,7 @@ export default function Weather(props) {
     setError(null);
   }
 
-  if (weatherData && weatherData.ready) {
+  if (weatherData.ready) {
     return (
       <div className="Weather">
         <form onSubmit={handleSubmit}>
