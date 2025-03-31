@@ -85,12 +85,8 @@ export default function Weather(props) {
     const now = Date.now();
     const timeSinceLastRequest = now - lastRequestTime;
 
-    // If less than 2 seconds since last request, wait
+    // If less than 2 seconds since last request, wait silently
     if (timeSinceLastRequest < 2000) {
-      dispatch({
-        type: "SET_ERROR",
-        payload: "Please wait a moment before searching again.",
-      });
       return;
     }
 
