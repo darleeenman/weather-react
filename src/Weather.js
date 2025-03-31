@@ -34,7 +34,9 @@ export default function Weather(props) {
         setError("An error occurred. Please try again later.");
       }
     } else if (error.request) {
-      setError("No response from server. Please check your internet connection.");
+      setError(
+        "No response from server. Please check your internet connection."
+      );
     } else {
       setError("An error occurred. Please try again later.");
     }
