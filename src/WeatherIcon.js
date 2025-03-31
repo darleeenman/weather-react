@@ -4,7 +4,7 @@ export default function WeatherIcon(props) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    try {
+    const drawIcon = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
@@ -71,9 +71,11 @@ export default function WeatherIcon(props) {
         default:
           drawDefault(ctx, size);
       }
-    } catch (error) {
-      console.error("Error drawing weather icon:", error);
-    }
+    };
+
+    // Wrap the drawing in a setTimeout to ensure the canvas is ready
+    const timer = setTimeout(drawIcon, 0);
+    return () => clearTimeout(timer);
   }, [props.code, props.size]);
 
   // Helper functions for drawing weather icons
