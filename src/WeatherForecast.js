@@ -27,7 +27,9 @@ export default function WeatherForecast(props) {
         setError("Unable to load forecast data. Please try again later.");
       }
     } else if (error.request) {
-      setError("No response from server. Please check your internet connection.");
+      setError(
+        "No response from server. Please check your internet connection."
+      );
     } else {
       setError("Unable to load forecast data. Please try again later.");
     }
@@ -35,7 +37,7 @@ export default function WeatherForecast(props) {
   }
 
   function load() {
-    let apiKey = "5f472b7acba333cd8a035ea85a0d4d4c";
+    let apiKey = "63dfb39dc38318c0c7e200e9557dfa6f";
     let longitude = props.coordinates.lon;
     let latitude = props.coordinates.lat;
     let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=imperial&exclude=minutely,hourly,alerts`;
