@@ -7,21 +7,26 @@ export default function WeatherForecast(props) {
   let [loaded, setLoaded] = useState(false);
   let [forecast, setForecast] = useState(null);
   let [error, setError] = useState(null);
+  let [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setLoaded(false);
     setError(null);
+    setIsLoading(true);
   }, [props.coordinates]);
 
   function handleResponse(response) {
     setForecast(response.data.list);
     setLoaded(true);
     setError(null);
+    setIsLoading(false);
   }
 
   function handleError(error) {
     if (error.response) {
-      if (error.response.status === 401) {
+      if (error.response.status === 429) {
+        setError("Too many requests. Please wait a moment and try again.");
+      } else if (error.response.status === 401) {
         setError("API key error. Please try again later.");
       } else {
         setError("Unable to load forecast data. Please try again later.");
@@ -34,6 +39,7 @@ export default function WeatherForecast(props) {
       setError("Unable to load forecast data. Please try again later.");
     }
     setLoaded(true);
+    setIsLoading(false);
   }
 
   function load() {
@@ -69,7 +75,10 @@ export default function WeatherForecast(props) {
       </div>
     );
   } else {
-    load();
+    if (isLoading) {
+      load();
+      return <div className="loading">Loading forecast data...</div>;
+    }
     return null;
   }
 }

@@ -8,6 +8,7 @@ export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!weatherData.ready) {
@@ -28,11 +29,14 @@ export default function Weather(props) {
       city: response.data.name,
     });
     setError(null);
+    setIsLoading(false);
   }
 
   function handleError(error) {
     if (error.response) {
-      if (error.response.status === 404) {
+      if (error.response.status === 429) {
+        setError("Too many requests. Please wait a moment and try again.");
+      } else if (error.response.status === 404) {
         setError("City not found. Please try another city name.");
       } else if (error.response.status === 401) {
         setError("API key error. Please try again later.");
@@ -47,6 +51,7 @@ export default function Weather(props) {
       setError("An error occurred. Please try again later.");
     }
     setWeatherData({ ready: false });
+    setIsLoading(false);
   }
 
   function handleSubmit(event) {
@@ -56,6 +61,7 @@ export default function Weather(props) {
       return;
     }
     setWeatherData({ ready: false });
+    setIsLoading(true);
     search();
   }
 
@@ -85,8 +91,11 @@ export default function Weather(props) {
               onChange={handleCityChange}
               value={city}
             />
-            <button type="submit" className="search-button">
-              Search
+            <button
+              type="submit"
+              className="search-button"
+              disabled={isLoading}>
+              {isLoading ? "Searching..." : "Search"}
             </button>
           </div>
         </form>
@@ -96,6 +105,10 @@ export default function Weather(props) {
       </div>
     );
   } else {
-    return <div className="loading">Loading...</div>;
+    return (
+      <div className="Weather">
+        <div className="loading">Loading weather data...</div>
+      </div>
+    );
   }
 }
