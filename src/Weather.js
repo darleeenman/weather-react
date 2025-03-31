@@ -51,17 +51,24 @@ export default function Weather(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
+    if (!city.trim()) {
+      setError("Please enter a city name.");
+      return;
+    }
     setWeatherData({ ready: false });
     search();
   }
 
   function handleCityChange(event) {
     setCity(event.target.value);
+    setError(null);
   }
 
   function search() {
     const apiKey = "b05cde912d67b744d66a05c658a57e27";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+      city
+    )}&appid=${apiKey}&units=imperial`;
     axios.get(apiUrl).then(handleResponse).catch(handleError);
   }
 
@@ -76,6 +83,7 @@ export default function Weather(props) {
               className="search-input"
               autoFocus="on"
               onChange={handleCityChange}
+              value={city}
             />
             <button type="submit" className="search-button">
               Search
