@@ -17,7 +17,11 @@ export default function WeatherForecast({ coordinates }) {
     }
 
     try {
-      setForecast(response.data);
+      // Process the forecast data to get one forecast per day
+      const dailyForecasts = response.data.list.filter(
+        (item, index) => index % 8 === 0
+      );
+      setForecast(dailyForecasts);
       setError(null);
     } catch (err) {
       setError("Error processing forecast data");
@@ -101,17 +105,13 @@ export default function WeatherForecast({ coordinates }) {
     return <div className="error-message">{error}</div>;
   }
 
-  if (!forecast) {
-    return null;
-  }
-
   return (
     <div className="WeatherForecast">
       <h3>5-Day Forecast</h3>
       <div className="row">
-        {forecast.list.slice(0, 5).map((item, index) => (
+        {forecast.map((day, index) => (
           <div className="col" key={index}>
-            <WeatherForecastDay data={item} />
+            <WeatherForecastDay data={day} />
           </div>
         ))}
       </div>
