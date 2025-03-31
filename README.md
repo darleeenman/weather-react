@@ -1,3 +1,39 @@
+# Weather React App
+
+A React application that displays weather information for cities around the world.
+
+## Features
+
+- Search for any city's weather
+- Display current weather conditions
+- Show 5-day weather forecast
+- Responsive design
+- Error handling for API rate limits
+
+## Technologies Used
+
+- React.js
+- OpenWeatherMap API
+- CSS3
+- Netlify for deployment
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the development server: `npm start`
+4. Build for production: `npm run build`
+
+## API Key
+
+This project uses the OpenWeatherMap API. You'll need to sign up for a free API key at https://openweathermap.org/api.
+
+## Deployment
+
+This project is deployed on Netlify at: https://idyllic-quokka-319e3f.netlify.app/
+
+Last deployment trigger: 2024-03-19
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
