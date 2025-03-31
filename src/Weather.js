@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Weather.css";
 import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
@@ -10,6 +10,12 @@ export default function Weather(props) {
   let [error, setError] = useState(null);
   let [isLoading, setIsLoading] = useState(false);
   let [lastRequestTime, setLastRequestTime] = useState(0);
+
+  useEffect(() => {
+    if (!weatherData) {
+      search();
+    }
+  }, []); // Empty dependency array means this runs once on mount
 
   function handleResponse(response) {
     setWeatherData({
@@ -112,7 +118,6 @@ export default function Weather(props) {
       </div>
     );
   } else {
-    search();
     return (
       <div className="Weather">
         <form onSubmit={handleSubmit}>
