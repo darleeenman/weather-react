@@ -14,7 +14,7 @@ export default function WeatherForecast(props) {
   }, [props.coordinates]);
 
   function handleResponse(response) {
-    setForecast(response.data.daily);
+    setForecast(response.data.list);
     setLoaded(true);
     setError(null);
   }
@@ -40,7 +40,7 @@ export default function WeatherForecast(props) {
     let apiKey = "b05cde912d67b744d66a05c658a57e27";
     let longitude = props.coordinates.lon;
     let latitude = props.coordinates.lat;
-    let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=imperial&exclude=minutely,hourly,alerts`;
+    let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=imperial`;
 
     axios.get(apiUrl).then(handleResponse).catch(handleError);
   }

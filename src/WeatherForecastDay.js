@@ -4,12 +4,12 @@ import "./WeatherForecast.css";
 
 export default function WeatherForecastDay(props) {
   function maxTemperature() {
-    let temperature = Math.round(props.data.temp.max);
+    let temperature = Math.round(props.data.main.temp_max);
     return `${temperature}°`;
   }
 
   function minTemperature() {
-    let temperature = Math.round(props.data.temp.min);
+    let temperature = Math.round(props.data.main.temp_min);
     return `${temperature}°`;
   }
 
@@ -23,7 +23,7 @@ export default function WeatherForecastDay(props) {
   }
 
   function windSpeed() {
-    return Math.round(props.data.wind_speed);
+    return Math.round(props.data.wind.speed);
   }
 
   return (
@@ -36,7 +36,7 @@ export default function WeatherForecastDay(props) {
       </div>
       <div className="forecast-details">
         <div className="forecast-humidity">
-          Humidity: {props.data.humidity}%
+          Humidity: {props.data.main.humidity}%
         </div>
         <div className="forecast-wind">Wind: {windSpeed()} mph</div>
       </div>
