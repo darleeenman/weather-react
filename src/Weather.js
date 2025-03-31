@@ -11,31 +11,7 @@ export default function Weather(props) {
   let [isLoading, setIsLoading] = useState(false);
   let [lastRequestTime, setLastRequestTime] = useState(0);
 
-  const search = useCallback(() => {
-    const now = Date.now();
-    const timeSinceLastRequest = now - lastRequestTime;
-
-    // If less than 2 seconds since last request, wait
-    if (timeSinceLastRequest < 2000) {
-      setError("Please wait a moment before searching again.");
-      return;
-    }
-
-    setIsLoading(true);
-    setLastRequestTime(now);
-
-    const apiKey = "b05cde912d67b744d66a05c658a57e27";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse).catch(handleError);
-  }, [city, lastRequestTime]);
-
-  useEffect(() => {
-    if (!weatherData.ready) {
-      search();
-    }
-  }, []); // Empty dependency array for initial load only
-
-  function handleResponse(response) {
+  const handleResponse = useCallback((response) => {
     setWeatherData({
       ready: true,
       coordinates: response.data.coord,
@@ -49,9 +25,9 @@ export default function Weather(props) {
     });
     setError(null);
     setIsLoading(false);
-  }
+  }, []);
 
-  function handleError(error) {
+  const handleError = useCallback((error) => {
     if (error.response) {
       if (error.response.status === 429) {
         setError(
@@ -72,7 +48,31 @@ export default function Weather(props) {
       setError("An error occurred. Please try again later.");
     }
     setIsLoading(false);
-  }
+  }, []);
+
+  const search = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastRequest = now - lastRequestTime;
+
+    // If less than 2 seconds since last request, wait
+    if (timeSinceLastRequest < 2000) {
+      setError("Please wait a moment before searching again.");
+      return;
+    }
+
+    setIsLoading(true);
+    setLastRequestTime(now);
+
+    const apiKey = "b05cde912d67b744d66a05c658a57e27";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(handleResponse).catch(handleError);
+  }, [city, lastRequestTime, handleResponse, handleError]);
+
+  useEffect(() => {
+    if (!weatherData.ready) {
+      search();
+    }
+  }, [weatherData.ready, search]);
 
   function handleSubmit(event) {
     event.preventDefault();
