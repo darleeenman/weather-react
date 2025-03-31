@@ -12,6 +12,12 @@ export default function Weather(props) {
   let [lastRequestTime, setLastRequestTime] = useState(0);
 
   const handleResponse = useCallback((response) => {
+    if (!response || !response.data) {
+      setError("Invalid response from server");
+      setIsLoading(false);
+      return;
+    }
+
     setWeatherData({
       ready: true,
       coordinates: response.data.coord,
@@ -64,14 +70,28 @@ export default function Weather(props) {
     setLastRequestTime(now);
 
     const apiKey = "b05cde912d67b744d66a05c658a57e27";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse).catch(handleError);
+    const encodedCity = encodeURIComponent(city.trim());
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${apiKey}&units=metric`;
+
+    axios
+      .get(apiUrl)
+      .then(handleResponse)
+      .catch(handleError)
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [city, lastRequestTime, handleResponse, handleError]);
 
   useEffect(() => {
-    if (!weatherData.ready) {
+    let mounted = true;
+
+    if (!weatherData.ready && mounted) {
       search();
     }
+
+    return () => {
+      mounted = false;
+    };
   }, [weatherData.ready, search]);
 
   function handleSubmit(event) {
