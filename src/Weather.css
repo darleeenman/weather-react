@@ -3,6 +3,9 @@
   max-width: 800px;
   margin: 0 auto;
   font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .Weather form {
@@ -85,71 +88,66 @@
 }
 
 .Weather .form-control {
-  background: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 8px;
-  padding: 12px;
+  padding: 12px 20px;
   font-size: 16px;
-  font-family: "Poppins", sans-serif;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .Weather .form-control:focus {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   outline: none;
 }
 
 .Weather .btn-primary {
-  background: #007bff;
+  background-color: #4caf50;
   border: none;
   border-radius: 8px;
-  padding: 12px;
+  padding: 12px 24px;
   font-size: 16px;
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
   transition: all 0.3s ease;
+  margin-left: 10px;
 }
 
 .Weather .btn-primary:hover {
-  background: #0056b3;
+  background-color: #45a049;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .Weather .btn-primary:disabled {
-  background: #ccc;
+  background-color: #cccccc;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
 .Weather .error-message {
-  color: #dc3545;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  color: #ff6b6b;
+  font-size: 14px;
+  margin-top: 8px;
+  text-shadow: none;
 }
 
 .Weather .loading-message {
-  color: #fff;
-  text-align: center;
-  font-size: 18px;
-  margin: 20px 0;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  font-family: "Poppins", sans-serif;
-  font-weight: 300;
+  color: #4caf50;
+  font-size: 14px;
+  margin-top: 8px;
+  text-shadow: none;
 }
 
 .weather-container {
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 30px;
   margin-top: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .search-container {
@@ -192,9 +190,17 @@
     padding: 15px;
   }
 
-  .Weather .form-control,
-  .Weather .btn-primary {
-    padding: 10px;
+  .Weather .form-control {
+    padding: 10px 15px;
     font-size: 14px;
+  }
+
+  .Weather .btn-primary {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .weather-container {
+    padding: 20px;
   }
 }
