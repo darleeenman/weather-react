@@ -4,67 +4,75 @@ export default function WeatherIcon(props) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const size = props.size || 50;
+    try {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-    canvas.width = size;
-    canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
-    // Clear the canvas
-    ctx.clearRect(0, 0, size, size);
+      const size = props.size || 50;
 
-    // Set the icon color to transparent white
-    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.lineWidth = 2;
+      canvas.width = size;
+      canvas.height = size;
 
-    // Draw the icon based on the weather code
-    switch (props.code) {
-      case "01d": // clear sky day
-        drawSun(ctx, size);
-        break;
-      case "01n": // clear sky night
-        drawMoon(ctx, size);
-        break;
-      case "02d": // few clouds day
-        drawPartlyCloudy(ctx, size, true);
-        break;
-      case "02n": // few clouds night
-        drawPartlyCloudy(ctx, size, false);
-        break;
-      case "03d": // scattered clouds
-      case "03n":
-        drawCloudy(ctx, size);
-        break;
-      case "04d": // broken clouds
-      case "04n":
-        drawBrokenClouds(ctx, size);
-        break;
-      case "09d": // shower rain
-      case "09n":
-        drawRain(ctx, size);
-        break;
-      case "10d": // rain day
-        drawRainWithSun(ctx, size);
-        break;
-      case "10n": // rain night
-        drawRainWithMoon(ctx, size);
-        break;
-      case "11d": // thunderstorm
-      case "11n":
-        drawThunderstorm(ctx, size);
-        break;
-      case "13d": // snow
-      case "13n":
-        drawSnow(ctx, size);
-        break;
-      case "50d": // mist
-      case "50n":
-        drawMist(ctx, size);
-        break;
-      default:
-        drawDefault(ctx, size);
+      // Clear the canvas
+      ctx.clearRect(0, 0, size, size);
+
+      // Set the icon color to white with opacity
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+
+      // Draw the icon based on the weather code
+      switch (props.code) {
+        case "01d": // clear sky day
+          drawSun(ctx, size);
+          break;
+        case "01n": // clear sky night
+          drawMoon(ctx, size);
+          break;
+        case "02d": // few clouds day
+          drawPartlyCloudy(ctx, size, true);
+          break;
+        case "02n": // few clouds night
+          drawPartlyCloudy(ctx, size, false);
+          break;
+        case "03d": // scattered clouds
+        case "03n":
+          drawCloudy(ctx, size);
+          break;
+        case "04d": // broken clouds
+        case "04n":
+          drawBrokenClouds(ctx, size);
+          break;
+        case "09d": // shower rain
+        case "09n":
+          drawRain(ctx, size);
+          break;
+        case "10d": // rain day
+          drawRainWithSun(ctx, size);
+          break;
+        case "10n": // rain night
+          drawRainWithMoon(ctx, size);
+          break;
+        case "11d": // thunderstorm
+        case "11n":
+          drawThunderstorm(ctx, size);
+          break;
+        case "13d": // snow
+        case "13n":
+          drawSnow(ctx, size);
+          break;
+        case "50d": // mist
+        case "50n":
+          drawMist(ctx, size);
+          break;
+        default:
+          drawDefault(ctx, size);
+      }
+    } catch (error) {
+      console.error("Error drawing weather icon:", error);
     }
   }, [props.code, props.size]);
 
@@ -113,9 +121,8 @@ export default function WeatherIcon(props) {
       0,
       2 * Math.PI
     );
-    ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+    ctx.fillStyle = "#ffffff";
     ctx.fill();
-    ctx.fillStyle = "rgba(255, 255, 255, 0.5)"; // Reset fill style
   }
 
   function drawCloudy(ctx, size) {
@@ -251,5 +258,5 @@ export default function WeatherIcon(props) {
     ctx.fill();
   }
 
-  return <canvas ref={canvasRef} alt="weather icon" />;
+  return <canvas ref={canvasRef} alt="weather icon" style={{ opacity: 0.5 }} />;
 }
