@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Weather.css";
 import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
@@ -11,11 +11,29 @@ export default function Weather(props) {
   let [isLoading, setIsLoading] = useState(false);
   let [lastRequestTime, setLastRequestTime] = useState(0);
 
+  const search = useCallback(() => {
+    const now = Date.now();
+    const timeSinceLastRequest = now - lastRequestTime;
+
+    // If less than 2 seconds since last request, wait
+    if (timeSinceLastRequest < 2000) {
+      setError("Please wait a moment before searching again.");
+      return;
+    }
+
+    setIsLoading(true);
+    setLastRequestTime(now);
+
+    const apiKey = "b05cde912d67b744d66a05c658a57e27";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(handleResponse).catch(handleError);
+  }, [city, lastRequestTime]);
+
   useEffect(() => {
     if (!weatherData) {
       search();
     }
-  }, []); // Empty dependency array means this runs once on mount
+  }, [weatherData, search]);
 
   function handleResponse(response) {
     setWeatherData({
@@ -54,24 +72,6 @@ export default function Weather(props) {
       setError("An error occurred. Please try again later.");
     }
     setIsLoading(false);
-  }
-
-  function search() {
-    const now = Date.now();
-    const timeSinceLastRequest = now - lastRequestTime;
-
-    // If less than 2 seconds since last request, wait
-    if (timeSinceLastRequest < 2000) {
-      setError("Please wait a moment before searching again.");
-      return;
-    }
-
-    setIsLoading(true);
-    setLastRequestTime(now);
-
-    const apiKey = "b05cde912d67b744d66a05c658a57e27";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse).catch(handleError);
   }
 
   function handleSubmit(event) {
