@@ -18,19 +18,24 @@ export default function Weather(props) {
       return;
     }
 
-    setWeatherData({
-      ready: true,
-      coordinates: response.data.coord,
-      temperature: response.data.main.temp,
-      humidity: response.data.main.humidity,
-      description: response.data.weather[0].description,
-      icon: response.data.weather[0].icon,
-      wind: response.data.wind.speed,
-      city: response.data.name,
-      date: new Date(response.data.dt * 1000),
-    });
-    setError(null);
-    setIsLoading(false);
+    try {
+      setWeatherData({
+        ready: true,
+        coordinates: response.data.coord,
+        temperature: response.data.main.temp,
+        humidity: response.data.main.humidity,
+        description: response.data.weather[0].description,
+        icon: response.data.weather[0].icon,
+        wind: response.data.wind.speed,
+        city: response.data.name,
+        date: new Date(response.data.dt * 1000),
+      });
+      setError(null);
+    } catch (err) {
+      setError("Error processing weather data");
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   const handleError = useCallback((error) => {
@@ -71,10 +76,15 @@ export default function Weather(props) {
 
     const apiKey = "b05cde912d67b744d66a05c658a57e27";
     const encodedCity = encodeURIComponent(city.trim());
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${apiKey}&units=metric`;
 
     axios
-      .get(apiUrl)
+      .get(apiUrl, {
+        timeout: 10000, // 10 second timeout
+        headers: {
+          Accept: "application/json",
+        },
+      })
       .then(handleResponse)
       .catch(handleError)
       .finally(() => {
