@@ -9,6 +9,7 @@ A React application that displays weather information for cities around the worl
 - Show 5-day weather forecast
 - Responsive design
 - Error handling for API rate limits
+- Request throttling to prevent rate limit errors
 
 ## Technologies Used
 
@@ -32,7 +33,7 @@ This project uses the OpenWeatherMap API. You'll need to sign up for a free API 
 
 This project is deployed on Netlify at: https://idyllic-quokka-319e3f.netlify.app/
 
-Last deployment trigger: 2024-03-19
+Last deployment trigger: 2024-03-19 15:30 UTC
 
 # Getting Started with Create React App
 
