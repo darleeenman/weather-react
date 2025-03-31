@@ -10,6 +10,7 @@ export default function Weather(props) {
   const { background, loading, error } = useSelector((state) => state);
   let [city, setCity] = useState(props.defaultCity);
   let [lastRequestTime, setLastRequestTime] = useState(0);
+  let [retryAfter, setRetryAfter] = useState(null);
 
   const handleResponse = useCallback(
     (response) => {
@@ -26,6 +27,7 @@ export default function Weather(props) {
           type: "SET_WEATHER",
           payload: response.data,
         });
+        setRetryAfter(null);
       } catch (err) {
         dispatch({
           type: "SET_ERROR",
@@ -40,10 +42,12 @@ export default function Weather(props) {
     (error) => {
       if (error.response) {
         if (error.response.status === 429) {
+          const retryAfterSeconds =
+            parseInt(error.response.headers["retry-after"]) || 60;
+          setRetryAfter(retryAfterSeconds);
           dispatch({
             type: "SET_ERROR",
-            payload:
-              "Too many requests. Please wait a few minutes before trying again.",
+            payload: `Rate limit exceeded. Please wait ${retryAfterSeconds} seconds before trying again.`,
           });
         } else if (error.response.status === 404) {
           dispatch({
@@ -90,6 +94,11 @@ export default function Weather(props) {
       return;
     }
 
+    // If we're in a retry period, don't make the request
+    if (retryAfter) {
+      return;
+    }
+
     dispatch({ type: "SET_LOADING", payload: true });
     setLastRequestTime(now);
 
@@ -109,7 +118,14 @@ export default function Weather(props) {
       .finally(() => {
         dispatch({ type: "SET_LOADING", payload: false });
       });
-  }, [city, lastRequestTime, handleResponse, handleError, dispatch]);
+  }, [
+    city,
+    lastRequestTime,
+    handleResponse,
+    handleError,
+    dispatch,
+    retryAfter,
+  ]);
 
   useEffect(() => {
     let mounted = true;
@@ -123,10 +139,27 @@ export default function Weather(props) {
     };
   }, [search]);
 
+  useEffect(() => {
+    if (retryAfter) {
+      const timer = setTimeout(() => {
+        setRetryAfter(null);
+        dispatch({ type: "SET_ERROR", payload: null });
+      }, retryAfter * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [retryAfter, dispatch]);
+
   function handleSubmit(event) {
     event.preventDefault();
     if (city.trim() === "") {
       dispatch({ type: "SET_ERROR", payload: "Please enter a city name" });
+      return;
+    }
+    if (retryAfter) {
+      dispatch({
+        type: "SET_ERROR",
+        payload: `Please wait ${retryAfter} seconds before trying again.`,
+      });
       return;
     }
     search();
@@ -150,14 +183,21 @@ export default function Weather(props) {
               className="form-control"
               onChange={handleCityChange}
               defaultValue={city}
+              disabled={loading || retryAfter}
             />
           </div>
           <div className="col-3">
             <input
               type="submit"
-              value={loading ? "Searching..." : "Search"}
+              value={
+                loading
+                  ? "Searching..."
+                  : retryAfter
+                  ? `Wait ${retryAfter}s`
+                  : "Search"
+              }
               className="btn btn-primary w-100"
-              disabled={loading}
+              disabled={loading || retryAfter}
             />
           </div>
         </div>
@@ -169,7 +209,7 @@ export default function Weather(props) {
           <WeatherForecast coordinates={weatherData.coord} />
         </>
       )}
-      {!weatherData && (
+      {!weatherData && !error && (
         <div className="loading-message">Loading weather data...</div>
       )}
     </div>
